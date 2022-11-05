@@ -1,7 +1,7 @@
 ##
 ## A Jekyll plugin for responsive images with ImageMagick.
 ##
-## See https://indii.org/software/jekyll-responsive-magick/
+##    https://indii.org/software/jekyll-responsive-magick/
 ##
 ## Copyright 2022 Lawrence Murray.
 ##
