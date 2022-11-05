@@ -20,7 +20,7 @@
 require 'fileutils'
 
 module Jekyll
-  module ResponsiveFilter
+  module ResponsiveMagickFilter
     @@sizes = {}
 
     def identify(input)
@@ -40,7 +40,7 @@ module Jekyll
       end
       @@sizes[input] = sizes.split(',', 2).map!(&:to_i)
     end
-  
+
     def srcset(input)
       site = @context.registers[:site]
       if not input.is_a? String || input.length == 0 || input.chr != '/'
@@ -116,7 +116,6 @@ module Jekyll
       return @@sizes[input][1]
     end
   end
-  
 end
 
-Liquid::Template.register_filter(Jekyll::ResponsiveFilter)
+Liquid::Template.register_filter(Jekyll::ResponsiveMagickFilter)
