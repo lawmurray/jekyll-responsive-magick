@@ -1,6 +1,6 @@
 # Responsive Images for Jekyll Sites
 
-`jekyll-responsive-magick` is a Jekyll plugin Jekyll plugin for responsive images. It adds filters for setting the `srcset`, `width` and `height` attributes of `img` elements, while automatically generating image variants of configured sizes using the ImageMagick command-line tools. Resized images are cached to minimize build times, regenerated only when the original source image changes.
+`jekyll-responsive-magick` is a Jekyll plugin for responsive images. It adds filters for setting the `srcset`, `width` and `height` attributes of `img` elements, while automatically generating image variants of configured sizes using the ImageMagick command-line tools. Resized images are cached to minimize build times, regenerated only when the original source image changes.
 
 The plugin has no dependencies besides the ImageMagick command line tools. This is by design, to make it easy to deploy on services such as Cloudflare Pages. For an example of its use, see [indii.org](https://indii.org). For a walkthrough of the implementation, see [Responsive Images with Jekyll and ImageMagick](https://indii.org/blog/responsive-images-with-jekyll-and-imagemagick/).
 
@@ -18,7 +18,7 @@ The plugin requires ImageMagick. It is standard in Linux distributions and avail
   group :jekyll_plugins do
     gem 'jekyll-responsive-magick', '~> 1.0'
   ```
-  Alternatively, copy the `lib/jekyll-responsive-magick.rb` file into your site's `_plugins` directory.
+  then `bundle install`. Alternatively, `gem install jekyll-responsive-magick` or simply copy the `lib/jekyll-responsive-magick.rb` file into your site's `_plugins` directory.
 
 2. **Enable the plugin** Add the following to your site's `_config.yml` file:
   ```yaml
