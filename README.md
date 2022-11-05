@@ -52,3 +52,17 @@ responsive:
 ```
 
 The choice of `widths` should cover the typical sizes of images as they appear on your site. The choice of quality (between 0 and 100) is a trade-off between file size (lower at lower quality) and clarity (higher at higher quality). It could be tuned by eye. Low quality can be satisfactory with the prevalence of high definition displays.
+
+## Performance
+
+The `srcset`, `width` and `height` filters call ImageMagick's `convert` and `identity` on demand, rather than for all image assets in a project. Caching is used to call `identity` at most once per image per build, and `convert` once per image per width, storing resized images in a subdirectory `_responsive/` for reuse in subsequent builds. Resized images in `_responsive/` are updated only if their original source image changes (detected using last modified times on files).
+
+If you experience any issues with outdated images, or simply wish to clean up, remove the whole `_responsive/` directory and rebuild. You may also wish to do this if you change the `widths` option in `_config.yml`.
+
+When using `width` and `height`, expect additional build time of about one second per 100 images due to the overhead of launching `identity` processes.
+
+When using `srcset` for the first time, expect additional build time on the order of minutes as resized images are generated with `convert`. Performance will improve drastically on subsequent builds because of the `_responsive/` subdirectory.
+
+## Further reading
+
+For a walkthrough of the implementation, see [Responsive Images with Jekyll and ImageMagick](https://indii.org/blog/responsive-images-with-jekyll-and-imagemagick/).
