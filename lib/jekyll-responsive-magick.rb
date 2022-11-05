@@ -20,7 +20,11 @@ module Jekyll
       if verbose
         print("#{cmd}\n")
       end
-      @@sizes[input] = `#{cmd}`.split(',', 2).map!(&:to_i)
+      sizes = `#{cmd}`
+      if not $?.success?
+        throw "width/height: failed to execute 'identity', is ImageMagick installed?"
+      end
+      @@sizes[input] = sizes.split(',', 2).map!(&:to_i)
     end
   
     def srcset(input)
@@ -66,7 +70,9 @@ module Jekyll
                 if verbose
                   print("#{cmd}\n")
                 end
-                system(cmd)
+                if not system(cmd)
+                  throw "srcset: failed to execute 'convert', is ImageMagick installed?"
+                end
               end
             end
             srcset.push("#{dirname}/#{file} #{width}w")
