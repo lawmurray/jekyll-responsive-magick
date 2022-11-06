@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Lawrence Murray"]
   s.email       = "lawrence@indii.org"
   s.files       = ["lib/jekyll-responsive-magick.rb", 'LICENSE']
-  s.homepage    = "https://indii.org.org/software/jekyll-responsive-magick"
+  s.homepage    = "https://indii.org/software/jekyll-responsive-magick"
   s.license       = "Apache-2.0"
   s.required_ruby_version = '>= 2.5'
 end
