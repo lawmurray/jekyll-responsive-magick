@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "jekyll-responsive-magick"
-  s.version     = "1.0.2"
+  s.version     = "1.0.3"
   s.summary     = "A Jekyll plugin for responsive images using ImageMagick. Works with Jekyll 4."
   s.description = "A Jekyll plugin for responsive images. Adds filters for setting the srcset, width and height attributes of HTML img elements, while automatically generating image variants of configured sizes using the ImageMagick command-line tools. Resized images are cached to minimize build times, regenerated only when the original source image changes."
   s.authors     = ["Lawrence Murray"]
