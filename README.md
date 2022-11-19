@@ -66,3 +66,19 @@ When using `srcset` for the first time, expect additional build time on the orde
 ## Further reading
 
 For a walkthrough of the implementation, see [Responsive Images with Jekyll and ImageMagick](https://indii.org/blog/responsive-images-with-jekyll-and-imagemagick/).
+
+## Building the Gem (developers only)
+
+To build and install, update the version number in `jekyll-responsive-magick.gemspec`, then:
+```bash
+gem build jekyll-responsive-magick.gemspec
+gem install --user-install jekyll-responsive-magick-VERSION.gem
+```
+
+To release a new version to [RubyGems](https://rubygems.org):
+```bash
+gem signin
+gem push jekyll-responsive-magick-VERSION.gem
+```
+
+For development and testing purposes, it is often easier to copy the `lib/jekyll-responsive-magick.rb` file into a site's `_plugins` directory and make modifications there.
