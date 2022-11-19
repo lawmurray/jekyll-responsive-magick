@@ -53,7 +53,7 @@ module Jekyll
       srcwidth = width(input)      
       srcset = ["#{input} #{srcwidth}w"]
 
-      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.gif'].include?(extname)
+      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
         dest = site.dest
         if site.config['responsive']['widths']
           widths = site.config['responsive']['widths']
@@ -80,7 +80,11 @@ module Jekyll
               site.static_files << StaticFile.new(site, "_responsive", dirname, file)
               if not File.exist?(dst) or File.mtime(src) > File.mtime(dst)
                 FileUtils.mkdir_p(File.dirname(dst))
-                cmd = "convert #{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
+                if extname == '.apng'
+                  cmd = "convert apng:#{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
+                else
+                  cmd = "convert #{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
+                end
                 if verbose
                   print("#{cmd}\n")
                 end
