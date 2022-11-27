@@ -18,6 +18,7 @@
 ## limitations under the License.
 ##
 require 'fileutils'
+require 'shellwords'
 
 module Jekyll
   module ResponsiveMagickFilter
