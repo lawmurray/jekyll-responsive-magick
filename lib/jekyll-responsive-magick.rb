@@ -120,6 +120,52 @@ module Jekyll
       end
       return @@sizes[input][1]
     end
+
+    def size(input, width)
+      site = @context.registers[:site]
+      if not input.is_a? String || input.length == 0 || input.chr != '/'
+        throw "size: input must be absolute path"
+      end
+      dirname = File.dirname(input)
+      basename = File.basename(input, '.*')
+      extname = File.extname(input)
+      src = ".#{dirname}/#{basename}#{extname}"
+
+      if site.config['responsive']['quality']
+        quality = site.config['responsive']['quality']
+      else
+        quality = 80
+      end
+      if site.config['responsive']['verbose']
+        verbose = site.config['responsive']['verbose']
+      else
+        verbose = false
+      end
+
+      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
+        file = "#{basename}-#{width}w#{extname}"
+        dst = "_responsive#{dirname}/#{file}"
+        if not site.static_files.find{|file| file.path == dst}
+          site.static_files << StaticFile.new(site, "_responsive", dirname, file)
+          if not File.exist?(dst) or File.mtime(src) > File.mtime(dst)
+            FileUtils.mkdir_p(File.dirname(dst))
+            if extname == '.apng'
+              cmd = "convert apng:#{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
+            else
+              cmd = "convert #{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
+            end
+            if verbose
+              print("#{cmd}\n")
+            end
+            if not system(cmd)
+              throw "size: failed to execute 'convert', is ImageMagick installed?"
+            end
+          end
+        end
+      end
+
+      return "#{dirname}/#{file}"
+    end
   end
 end
 
