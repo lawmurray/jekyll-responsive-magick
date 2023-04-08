@@ -41,12 +41,9 @@ The plugin provides three filters: `srcset`, `width` and `height`. Each consumes
 
 With the plugin installed and one or more uses of the `srcset`, `width` or `height` filters, you can build your site as normal, now with responsive images.
 
-There may be some cases where you can't use responsive images but still want to resize one, per example for a `background-image` style property. This is where the `size` filter become interesting:
+There may be cases where you cannot use responsive images but still want to resize to an explicit width, for example in a `background-image` style property. A fourth filter, `size`, can be used for this purpose:
 ```html
-<div 
-  class="..." 
-  style="background-image: url({{ src | size: 480 }});"
-></div>
+<div style="background-image: url({{ src | size: 480 }});">...</div>
 ```
 
 ## Configuration
