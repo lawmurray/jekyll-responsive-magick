@@ -16,7 +16,7 @@ The plugin requires ImageMagick. It is standard in Linux distributions and avail
 1. **Install the plugin** If you are using a `Gemfile`, add the following:
   ```ruby
   group :jekyll_plugins do
-    gem 'jekyll-responsive-magick', '~> 1.0'
+    gem 'jekyll-responsive-magick', '~> 1.2'
   ```
   then `bundle install`. Alternatively, `gem install jekyll-responsive-magick` or simply copy the `lib/jekyll-responsive-magick.rb` file into your site's `_plugins` directory.
 
