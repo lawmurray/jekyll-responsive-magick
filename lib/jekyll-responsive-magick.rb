@@ -66,7 +66,7 @@ module Jekyll
       srcwidth = width(input, "srcset")      
       srcset = ["#{input} #{srcwidth}w"]
 
-      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
+      if File.exist?(src) and image_mime_type?(src)
         dest = site.dest
         if site.config['responsive']['widths']
           widths = site.config['responsive']['widths']
@@ -149,7 +149,7 @@ module Jekyll
         verbose = false
       end
 
-      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
+      if File.exist?(src) and image_mime_type?(src)
         file = "#{basename}-#{width}w#{extname}"
         dst = "_responsive#{dirname}/#{file}"
         if not site.static_files.find{|file| file.path == dst}
