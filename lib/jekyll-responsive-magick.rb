@@ -42,11 +42,16 @@ module Jekyll
       @@sizes[input] = sizes.split(',', 2).map!(&:to_i)
     end
 
+    # Throw error if it is not an absolute path
+    def check_path(input, filter_name)
+      if not input.is_a? String || input.length == 0 || input.chr != '/'
+        throw "#{filter_name}: path must be an absolute path"
+      end
+    end
+
     def srcset(input)
       site = @context.registers[:site]
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "srcset: input must be absolute path"
-      end
+      check_path(input, "srcset")
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
@@ -123,9 +128,7 @@ module Jekyll
 
     def size(input, width)
       site = @context.registers[:site]
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "size: input must be absolute path"
-      end
+      check_path(input, "size")
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
