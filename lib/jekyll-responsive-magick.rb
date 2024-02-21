@@ -50,6 +50,12 @@ module Jekyll
       end
     end
 
+    # Return true if the file exists and is an image mime type
+    def image_mime_type?(src)
+      mime = FileMagic.new(FileMagic::MAGIC_MIME).file(src)
+      return mime.start_with?('image/')
+    end 
+
     def srcset(input)
       site = @context.registers[:site]
       check_path(input, "srcset")
