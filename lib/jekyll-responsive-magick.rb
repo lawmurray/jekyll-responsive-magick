@@ -56,7 +56,7 @@ module Jekyll
       basename = File.basename(input, '.*')
       extname = File.extname(input)
       src = ".#{dirname}/#{basename}#{extname}"
-      srcwidth = width(input)      
+      srcwidth = width(input, "srcset")      
       srcset = ["#{input} #{srcwidth}w"]
 
       if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
@@ -106,24 +106,21 @@ module Jekyll
       return srcset.join(', ')
     end
 
-    def width(input)
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "width: input must be absolute path"
-      end
-      if not @@sizes[input]
-        identify(input)
-      end
+    def width(input, from)
+      check_size(input, from)
       return @@sizes[input][0]
     end
 
-    def height(input)
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "height: input must be absolute path"
-      end
+    def height(input, from)
+      check_size(input, from)
+      return @@sizes[input][1]
+    end
+
+    def check_size(input, from)
+      check_path(input, from)
       if not @@sizes[input]
         identify(input)
       end
-      return @@sizes[input][1]
     end
 
     def size(input, width)
