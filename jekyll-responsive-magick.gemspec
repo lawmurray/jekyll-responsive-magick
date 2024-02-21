@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://indii.org/software/jekyll-responsive-magick"
   s.license       = "Apache-2.0"
   s.required_ruby_version = '>= 2.5'
+  s.add_runtime_dependency 'ruby-filemagic', '~> 0.7.3'
   s.metadata = {
     "bug_tracker_uri"   => "https://github.com/lawmurray/jekyll-responsive-magick/issues",
     "homepage_uri"      => "https://indii.org/software/jekyll-responsive-magick",

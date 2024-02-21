@@ -19,6 +19,7 @@
 ##
 require 'fileutils'
 require 'shellwords'
+require 'filemagic'
 
 module Jekyll
   module ResponsiveMagickFilter
