@@ -50,9 +50,19 @@ module Jekyll
     end
 
     # Return true if the file exists and is an image mime type
-    def image_mime_type?(src)
-      mime = FileMagic.new(FileMagic::MAGIC_MIME).file(src)
-      return mime.start_with?('image/')
+    def is_image?(src)
+      cmd = "identify -ping #{src.shellescape} 2>&1"
+      output = `#{cmd}`
+
+      if not $?.success?
+        if output.include?("identify: improper image header")
+          throw "file is not an image: '#{src}'"
+        else
+          throw "width/height: failed to execute 'identity', is ImageMagick installed?"
+        end
+      end
+
+      return true
     end 
 
     def srcset(input)
@@ -65,7 +75,7 @@ module Jekyll
       srcwidth = width(input, "srcset")      
       srcset = ["#{input} #{srcwidth}w"]
 
-      if File.exist?(src) and image_mime_type?(src)
+      if File.exist?(src) and is_image?(src)
         dest = site.dest
         if site.config['responsive']['widths']
           widths = site.config['responsive']['widths']
@@ -148,7 +158,7 @@ module Jekyll
         verbose = false
       end
 
-      if File.exist?(src) and image_mime_type?(src)
+      if File.exist?(src) and is_image?(src)
         file = "#{basename}-#{width}w#{extname}"
         dst = "_responsive#{dirname}/#{file}"
         if not site.static_files.find{|file| file.path == dst}
