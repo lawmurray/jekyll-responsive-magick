@@ -42,19 +42,40 @@ module Jekyll
       @@sizes[input] = sizes.split(',', 2).map!(&:to_i)
     end
 
+    # Throw error if it is not an absolute path
+    def check_path(input, filter_name)
+      if not input.is_a? String || input.length == 0 || input.chr != '/'
+        throw "#{filter_name}: path must be an absolute path"
+      end
+    end
+
+    # Return true if the file exists and is an image mime type
+    def is_image?(src)
+      cmd = "identify -ping #{src.shellescape} 2>&1"
+      output = `#{cmd}`
+
+      if not $?.success?
+        if output.include?("identify: improper image header")
+          throw "file is not an image: '#{src}'"
+        else
+          throw "width/height: failed to execute 'identity', is ImageMagick installed?"
+        end
+      end
+
+      return true
+    end 
+
     def srcset(input)
       site = @context.registers[:site]
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "srcset: input must be absolute path"
-      end
+      check_path(input, "srcset")
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
       src = ".#{dirname}/#{basename}#{extname}"
-      srcwidth = width(input)      
+      srcwidth = width(input, "srcset")      
       srcset = ["#{input} #{srcwidth}w"]
 
-      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
+      if File.exist?(src) and is_image?(src)
         dest = site.dest
         if site.config['responsive']['widths']
           widths = site.config['responsive']['widths']
@@ -101,31 +122,26 @@ module Jekyll
       return srcset.join(', ')
     end
 
-    def width(input)
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "width: input must be absolute path"
-      end
-      if not @@sizes[input]
-        identify(input)
-      end
+    def width(input, from)
+      check_size(input, from)
       return @@sizes[input][0]
     end
 
-    def height(input)
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "height: input must be absolute path"
-      end
+    def height(input, from)
+      check_size(input, from)
+      return @@sizes[input][1]
+    end
+
+    def check_size(input, from)
+      check_path(input, from)
       if not @@sizes[input]
         identify(input)
       end
-      return @@sizes[input][1]
     end
 
     def size(input, width)
       site = @context.registers[:site]
-      if not input.is_a? String || input.length == 0 || input.chr != '/'
-        throw "size: input must be absolute path"
-      end
+      check_path(input, "size")
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
@@ -142,7 +158,7 @@ module Jekyll
         verbose = false
       end
 
-      if File.exist?(src) and ['.jpg', '.jpeg', '.png', '.apng', '.gif'].include?(extname)
+      if File.exist?(src) and is_image?(src)
         file = "#{basename}-#{width}w#{extname}"
         dst = "_responsive#{dirname}/#{file}"
         if not site.static_files.find{|file| file.path == dst}
