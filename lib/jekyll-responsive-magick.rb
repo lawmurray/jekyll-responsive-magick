@@ -93,6 +93,7 @@ module Jekyll
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
+      new_extname = site.config['responsive']['format'] ? ".#{site.config['responsive']['format']}" : extname
       src = ".#{dirname}/#{basename}#{extname}"
       srcwidth = width(input, "srcset")      
       srcset = ["#{input} #{srcwidth}w"]
@@ -147,6 +148,7 @@ module Jekyll
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
+      new_extname = site.config['responsive']['format'] ? ".#{site.config['responsive']['format']}" : extname
       src = ".#{dirname}/#{basename}#{extname}"
 
       if not File.exist?(src) or not is_image?(src)
