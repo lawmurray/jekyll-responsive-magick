@@ -142,47 +142,29 @@ module Jekyll
     end
 
     def size(input, width)
-      site = @context.registers[:site]
       check_path(input, "size")
+      site = @context.registers[:site]
       dirname = File.dirname(input)
       basename = File.basename(input, '.*')
       extname = File.extname(input)
       src = ".#{dirname}/#{basename}#{extname}"
 
-      if site.config['responsive']['quality']
-        quality = site.config['responsive']['quality']
-      else
-        quality = 80
+      if not File.exist?(src) or not is_image?(src)
+        throw "srcset: file does not exist or is not an image: '#{src}'"
       end
-      if site.config['responsive']['verbose']
-        verbose = site.config['responsive']['verbose']
-      else
-        verbose = false
+      
+      file = "#{basename}-#{width}w#{new_extname}"
+      dst = "_responsive#{dirname}/#{file}"
+      full_path = "#{dirname}/#{file}"
+
+      if site.static_files.find{|file| file.path == dst}
+        return full_path # image is already generated
       end
 
-      if File.exist?(src) and is_image?(src)
-        file = "#{basename}-#{width}w#{extname}"
-        dst = "_responsive#{dirname}/#{file}"
-        if not site.static_files.find{|file| file.path == dst}
-          site.static_files << StaticFile.new(site, "_responsive", dirname, file)
-          if not File.exist?(dst) or File.mtime(src) > File.mtime(dst)
-            FileUtils.mkdir_p(File.dirname(dst))
-            if extname == '.apng'
-              cmd = "convert apng:#{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
-            else
-              cmd = "convert #{src.shellescape} -strip -quality #{quality} -resize #{width} #{dst.shellescape}"
-            end
-            if verbose
-              print("#{cmd}\n")
-            end
-            if not system(cmd)
-              throw "size: failed to execute 'convert', is ImageMagick installed?"
-            end
-          end
-        end
-      end
+      site.static_files << StaticFile.new(site, "_responsive", dirname, file)
+      convert(src, extname, dst, width)
 
-      return "#{dirname}/#{file}"
+      return full_path
     end
   end
 end
