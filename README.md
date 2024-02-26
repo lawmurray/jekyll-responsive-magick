@@ -54,9 +54,12 @@ You can configure the size variants and quality of resized images by adding conf
 responsive:
   widths: [400,500,700,900]
   quality: 30
+  format: webp
 ```
 
 The choice of `widths` should cover the typical sizes of images as they appear on your site. The choice of quality (between 0 and 100) is a trade-off between file size (lower at lower quality) and clarity (higher at higher quality). It could be tuned by eye. Low quality can be satisfactory with the prevalence of high definition displays.
+
+The `format` option can be used to specify the output format of the resized images. The default is the original format but you can force conversion to `webp`, per exemple, which is a modern format with good compression.
 
 ## Performance
 
