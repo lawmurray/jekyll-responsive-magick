@@ -100,26 +100,26 @@ module Jekyll
 
       if not File.exist?(src) or not is_image?(src)
         throw "srcset: file does not exist or is not an image: '#{src}'"
-      end
-
-      # as default, use breakpoints of Bootstrap 5
-      widths = site.config['responsive']['widths'] || [576, 768, 992, 1200, 1400]
-      
-      widths.map do |width|
-        if not srcwidth > width
-          next # image is not large enough to generate a smaller version
-        end
-
-        file = "#{basename}-#{width}w#{new_extname}"
-        dst = "_responsive#{dirname}/#{file}"
-        srcset.push("#{dirname}/#{file} #{width}w")
-
-        if site.static_files.find{|file| file.path == dst}
-          next # image is already generated
-        end
+      elsif File.extname(src) != '.svg'
+        # as default, use breakpoints of Bootstrap 5
+        widths = site.config['responsive']['widths'] || [576, 768, 992, 1200, 1400]
         
-        site.static_files << StaticFile.new(site, "_responsive", dirname, file)
-        convert(src, extname, dst, width)
+        widths.map do |width|
+          if not srcwidth > width
+            next # image is not large enough to generate a smaller version
+          end
+
+          file = "#{basename}-#{width}w#{new_extname}"
+          dst = "_responsive#{dirname}/#{file}"
+          srcset.push("#{dirname}/#{file} #{width}w")
+
+          if site.static_files.find{|file| file.path == dst}
+            next # image is already generated
+          end
+          
+          site.static_files << StaticFile.new(site, "_responsive", dirname, file)
+          convert(src, extname, dst, width)
+        end
       end
 
       return srcset.join(', ')
