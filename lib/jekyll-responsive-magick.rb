@@ -125,12 +125,12 @@ module Jekyll
       return srcset.join(', ')
     end
 
-    def width(input, from)
+    def width(input, from = "width")
       check_size(input, from)
       return @@sizes[input][0]
     end
 
-    def height(input, from)
+    def height(input, from = "width")
       check_size(input, from)
       return @@sizes[input][1]
     end
