@@ -130,7 +130,7 @@ module Jekyll
       return @@sizes[input][0]
     end
 
-    def height(input, from = "width")
+    def height(input, from = "height")
       check_size(input, from)
       return @@sizes[input][1]
     end
